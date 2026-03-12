@@ -1,113 +1,226 @@
+<h1 align="center">Sahil Pahat</h1>
+
+<p align="center">
+React Native Developer • Mobile App Engineer • Cross-Platform Specialist
+</p>
+
+<p align="center">
+<a href="https://pahatsahil.github.io/sahil-portfolio-test/">🌐 Live Portfolio</a> •
+<a href="https://github.com/Pahatsahil">GitHub</a> •
+<a href="https://linkedin.com/in/sahilpahat101019">LinkedIn</a>
+</p>
+
+---
+
 # React Native Developer Portfolio
 
-A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS for showcasing React Native development expertise.
+A modern **developer portfolio website** built using **React, TypeScript, TailwindCSS, and Firebase**.
 
-## Features
+This portfolio showcases my **React Native mobile development experience**, projects, and skills.  
+All portfolio content is dynamically loaded from **Firebase Firestore**, allowing updates without redeploying the website.
 
-- Modern dark theme with React Native cyan color palette
-- Fully responsive design (mobile, tablet, desktop)
-- Smooth animations using Framer Motion
-- Sections: Hero, About, Skills, Experience, Projects, Contact
-- Optimized for GitHub Pages deployment
+The site is optimized for **performance, responsiveness, and GitHub Pages deployment**.
 
-## Getting Started
+---
 
-### Prerequisites
+# Live Demo
 
-- Node.js 18+
-- pnpm (recommended) or npm
+https://pahatsahil.github.io/sahil-portfolio-test/
 
-### Installation
+---
+
+# Features
+
+- Modern responsive UI (mobile, tablet, desktop)
+- Dark theme developer portfolio
+- Smooth animations with Framer Motion
+- Firebase Firestore powered CMS
+- Firebase Analytics integration
+- Firebase App Check security
+- EmailJS contact form
+- Dynamic portfolio data (no hardcoded content)
+- GitHub Pages deployment
+- Type-safe React + TypeScript architecture
+
+---
+
+# Tech Stack
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- TailwindCSS
+- Framer Motion
+
+### Backend / Services
+
+- Firebase Firestore
+- Firebase Analytics
+- Firebase App Check
+- EmailJS
+
+### Deployment
+
+- GitHub Pages
+
+---
+
+# Portfolio Preview
+
+![Portfolio Screenshot](./screenshots/portfolio.png)
+
+---
+
+# Project Architecture
+
+src
+├ components
+│ ├ Hero
+│ ├ About
+│ ├ SkillsSection
+│ ├ ExperienceSection
+│ ├ ProjectsSection
+│ ├ Contact
+│ └ Footer
+│
+├ hooks
+│ ├ useProfile
+│ ├ useExperience
+│ ├ useProjects
+│ ├ useSkills
+│ ├ useSocial
+│ └ useContact
+│
+├ lib
+│ └ firebase.ts
+│
+└ App.tsx
+
+---
+
+# Firestore Data Structure
+
+The portfolio data is stored in **Firebase Firestore**.
+
+Collections:
+
+profile
+experience
+projects
+skills
+social
+contact
+
+Example structure:
+
+profile
+main
+
+experience
+doc1
+doc2
+
+projects
+doc1
+doc2
+
+skills
+doc1
+doc2
+
+---
+
+# Getting Started
+
+## Clone the repository
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/Pahatsahil/sahil-portfolio-test.git
+cd sahil-portfolio-test
+```
 
-# Install dependencies
+## Install dependencies
+
+```
 pnpm install
 ```
 
-### Development
+## Setup Environment Variables
 
-```bash
-# Start development server
+Create a .env file in the project root.
+
+```
+VITE_EMAILJS_SERVICE_ID=
+VITE_EMAILJS_TEMPLATE_ID=
+VITE_EMAILJS_PUBLIC_KEY=
+
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_MEASUREMENT_ID=
+```
+
+## Run Development Server
+
+```
 pnpm dev
 ```
 
-### Build for GitHub Pages
+The app will start at:
 
-```bash
-# Build the project
-GITHUB_PAGES=true pnpm build
+```
+http://localhost:5173
 ```
 
-The built files will be in the `dist` folder, ready to deploy to GitHub Pages.
+## Firebase Setup
 
-## Deployment to GitHub Pages
+1. Create a Firebase project
 
-### Option 1: Manual Deployment
+2. Enable Firestore Database
 
-1. Build the project:
-   ```bash
-   GITHUB_PAGES=true pnpm build
-   ```
+3. Create Firestore collections:
 
-2. Copy the contents of the `dist` folder to your GitHub repository
-
-3. Go to Repository Settings → Pages
-
-4. Select "Deploy from a branch"
-
-5. Choose the `main` (or `master`) branch and the `dist` folder
-
-6. Click Save
-
-### Option 2: Automatic Deployment with GitHub Actions
-
-The repository includes a GitHub Actions workflow that automatically builds and deploys when you push to main.
-
-1. Go to Repository Settings → Pages
-
-2. Under "Build and deployment", select "GitHub Actions"
-
-3. Push your code to GitHub
-
-4. The workflow will automatically build and deploy your site
-
-## Customization
-
-### Update Your Information
-
-Edit `src/App.tsx` to update:
-- Your name in the Hero section
-- Experience details
-- Project information
-- Contact information
-- Social media links
-
-### Update Base URL
-
-In `vite.config.ts`, update the base URL to match your repository name:
-
-```typescript
-const baseUrl = '/your-repo-name/'
+```
+profile
+experience
+projects
+skills
+social
+contact
 ```
 
-### Changing Colors
+## Firestore Security Rules
 
-Edit `src/index.css` to customize:
-- Primary color: `#61dafb` (React Cyan)
-- Secondary color: `#818cf8` (Indigo)
-- Background: `#0f172a` (Dark Navy)
+For a portfolio site (read-only public data):
 
-## Tech Stack
+```
+rules_version = '2';
 
-- React 18 + TypeScript
-- Vite
-- Tailwind CSS
-- Framer Motion
-- Lucide React Icons
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+  }
+}
+```
+
+## Contact
+
+Email:
+sahilpahat12@gmail.com
+
+LinkedIn:
+https://linkedin.com/in/sahilpahat101019
+
+GitHub:
+https://github.com/Pahatsahil
 
 ## License
 
