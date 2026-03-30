@@ -10,6 +10,24 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { firebaseConfig, COLLECTIONS } from "../lib/firebase";
+
+export interface Education {
+  id: string;
+  degree: string;
+  institution: string;
+  year: string;
+  grade?: string;
+  order?: number;
+}
+
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  year: string;
+  url?: string;
+  order?: number;
+}
 import { getAnalytics } from "firebase/analytics";
 
 // Initialize Firebase (only once)
@@ -444,4 +462,126 @@ export const useContact = () => {
   }, []);
 
   return { contact, loading, error };
+};
+
+// Hook to fetch education
+export const useEducation = () => {
+  const [education, setEducation] = useState<Education[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEducation = async () => {
+      try {
+        const firestore = getDb();
+        if (!firestore) {
+          setEducation([
+            {
+              id: "1",
+              degree: "Bachelor of Computer Applications (BCA)",
+              institution: "Indira Gandhi National Open University",
+              year: "2022 – 2025",
+              order: 1,
+            },
+            {
+              id: "2",
+              degree: "12th – Science (PCM)",
+              institution: "Delhi Public School",
+              year: "2020 – 2021",
+              order: 2,
+            },
+          ]);
+          setLoading(false);
+          return;
+        }
+
+        const querySnapshot = await getDocs(
+          collection(firestore, "education"),
+        );
+        const data = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as Education))
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+        if (data.length) setEducation(data);
+        else setEducation([
+          {
+            id: "1",
+            degree: "Bachelor of Computer Applications (BCA)",
+            institution: "Indira Gandhi National Open University",
+            year: "2022 – 2025",
+            order: 1,
+          },
+        ]);
+      } catch (err) {
+        console.error("Error fetching education:", err);
+        setError("Failed to load education");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEducation();
+  }, []);
+
+  return { education, loading, error };
+};
+
+// Hook to fetch certifications
+export const useCertifications = () => {
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCertifications = async () => {
+      try {
+        const firestore = getDb();
+        if (!firestore) {
+          setCertifications([
+            {
+              id: "1",
+              name: "React Native – The Practical Guide",
+              issuer: "Udemy",
+              year: "2023",
+              order: 1,
+            },
+            {
+              id: "2",
+              name: "TypeScript for Professionals",
+              issuer: "Udemy",
+              year: "2023",
+              order: 2,
+            },
+          ]);
+          setLoading(false);
+          return;
+        }
+
+        const querySnapshot = await getDocs(
+          collection(firestore, "certifications"),
+        );
+        const data = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as Certification))
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+        if (data.length) setCertifications(data);
+        else setCertifications([
+          {
+            id: "1",
+            name: "React Native – The Practical Guide",
+            issuer: "Udemy",
+            year: "2023",
+            order: 1,
+          },
+        ]);
+      } catch (err) {
+        console.error("Error fetching certifications:", err);
+        setError("Failed to load certifications");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCertifications();
+  }, []);
+
+  return { certifications, loading, error };
 };

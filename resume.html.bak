@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1a1a1a; --muted:#555; --light:#888; --rule:#d8d3cc; --page-w:780px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'DM Sans',sans-serif; font-weight:300;
+    background:#f0ece5; color:var(--ink);
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; padding:2rem 1rem 4rem;
+  }
+  .toolbar {
+    width:var(--page-w); max-width:100%;
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;
+  }
+  .toolbar-label { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--light); }
+  #status { font-size:12px; color:var(--light); font-style:italic; }
+  .btn-download {
+    background:var(--ink); color:#fff; border:none; padding:10px 24px;
+    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
+    letter-spacing:.06em; cursor:pointer; border-radius:2px; transition:opacity .15s;
+  }
+  .btn-download:hover { opacity:.75; }
+  #resume {
+    width:var(--page-w); max-width:100%; background:#fff;
+    padding:56px 60px; box-shadow:0 2px 40px rgba(0,0,0,.08); min-height:1020px;
+  }
+  .r-header { margin-bottom:36px; }
+  .r-name { font-family:'DM Serif Display',serif; font-size:42px; font-weight:400; line-height:1.1; letter-spacing:-.01em; margin-bottom:6px; }
+  .r-title { font-size:14px; font-weight:400; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:18px; }
+  .r-contact { display:flex; flex-wrap:wrap; gap:4px 20px; font-size:13px; color:var(--muted); }
+  .r-contact a { color:var(--muted); text-decoration:none; }
+  .r-contact a:hover { color:var(--ink); }
+  .r-section { margin-bottom:32px; }
+  .r-section-title {
+    font-size:10px; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--light); border-bottom:1px solid var(--rule); padding-bottom:6px; margin-bottom:20px;
+  }
+  .r-item { margin-bottom:22px; }
+  .r-item:last-child { margin-bottom:0; }
+  .r-item-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2px; gap:8px; }
+  .r-item-title { font-size:15px; font-weight:500; color:var(--ink); }
+  .r-item-date { font-size:12px; color:var(--light); white-space:nowrap; flex-shrink:0; }
+  .r-item-sub { font-size:13px; color:var(--muted); margin-bottom:6px; }
+  .r-item-bullets { list-style:none; padding:0; }
+  .r-item-bullets li { font-size:13.5px; line-height:1.65; color:#333; padding-left:14px; position:relative; margin-bottom:2px; }
+  .r-item-bullets li::before { content:'–'; position:absolute; left:0; color:var(--light); }
+  .skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 32px; }
+  .skill-group-name { font-size:12px; font-weight:500; color:var(--muted); margin-bottom:3px; letter-spacing:.04em; }
+  .skill-tags { display:flex; flex-wrap:wrap; gap:4px; }
+  .skill-tag { font-size:12px; background:#f5f2ee; color:#444; padding:3px 9px; border-radius:2px; }
+  .skeleton { background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:3px; height:14px; margin-bottom:8px; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  @media print {
+    body { background:#fff; padding:0; }
+    .toolbar { display:none; }
+    #resume { box-shadow:none; padding:36px 48px; width:100%; min-height:unset; }
+    .r-item-bullets li { font-size:12.5px; }
+    .r-name { font-size:36px; }
+    @page { margin:0.5cm; size:A4; }
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <div class="toolbar-label">Resume</div>
+    <div id="status">Loading…</div>
+  </div>
+  <button class="btn-download" onclick="window.print()">Download PDF</button>
+</div>
+
+<div id="resume">
+  <div class="skeleton" style="width:45%;height:42px;margin-bottom:10px"></div>
+  <div class="skeleton" style="width:25%;height:12px;margin-bottom:20px"></div>
+  <div class="skeleton" style="width:70%;height:12px"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, collection, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+const senderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
+const appId = import.meta.env.VITE_FIREBASE_APP_ID;
+const measurementId = import.meta.env.VITE_MEASUREMENT_ID;
+  // ── 🔧 REPLACE WITH YOUR FIREBASE CONFIG ──
+  const firebaseConfig = {
+    apiKey,
+    authDomain: "portfolio-49755.firebaseapp.com",
+    projectId,
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const getMain = async col => { const s = await getDoc(doc(db,col,"main")); return s.exists()?s.data():{}; };
+  const getAll  = async col => { const s = await getDocs(collection(db,col)); return s.docs.map(d=>({id:d.id,...d.data()})); };
+
+  async function loadResume() {
+    const status = document.getElementById('status');
+    try {
+      const [profile, contact, social, experience, projects, skills, education, certifications] =
+        await Promise.all([
+          getMain('profile'),
+          getMain('contact'),
+          getMain('social'),
+          getAll('experience'),
+          getAll('projects'),
+          getAll('skills'),
+          getAll('education'),
+          getAll('certifications'),
+        ]);
+      render({ profile, contact, social, experience, projects, skills, education, certifications });
+      status.textContent = "Live from Firebase";
+    } catch(e) {
+      status.textContent = "Error — check Firebase config";
+      console.error(e);
+    }
+  }
+
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+  function sec(title) {
+    const s = el('div','r-section');
+    s.appendChild(el('div','r-section-title',title));
+    return s;
+  }
+
+  function render({ profile, contact, social, experience, projects, skills, education, certifications }) {
+    const root = document.getElementById('resume');
+    root.innerHTML = '';
+
+    // Header
+    const hdr = el('div','r-header');
+    hdr.innerHTML = `
+      <div class="r-name">${profile.name||''}</div>
+      <div class="r-title">${profile.title||profile.role||''}</div>
+      <div class="r-contact">
+        ${contact.showEmail && contact.email ? `<span>${contact.email}</span>` : ''}
+        ${contact.showPhone && contact.phone ? `<span>${contact.phone}</span>` : ''}
+        ${profile.location  ? `<span>${profile.location}</span>`  : ''}
+        ${social.linkedin   ? `<a href="${social.linkedin}" target="_blank">LinkedIn</a>` : ''}
+        ${social.github     ? `<a href="${social.github}"   target="_blank">GitHub</a>`   : ''}
+        ${social.portfolio  ? `<a href="${social.portfolio}" target="_blank">Portfolio</a>` : ''}
+      </div>`;
+    root.appendChild(hdr);
+
+    // Summary
+    if (profile.summary || profile.bio) {
+      const s = sec('Profile');
+      const p = el('p','', profile.summary||profile.bio);
+      Object.assign(p.style,{fontSize:'13.5px',lineHeight:'1.7',color:'#333'});
+      s.appendChild(p); root.appendChild(s);
+    }
+
+    // Experience
+    if (experience.length) {
+      experience.sort((a,b)=>(a.order||0)-(b.order||0));
+      const s = sec('Experience');
+      experience.forEach(exp => {
+        const item = el('div','r-item');
+        item.innerHTML = `
+          <div class="r-item-header">
+            <span class="r-item-title">${exp.role||exp.title||''}</span>
+            <span class="r-item-date">${exp.from||exp.startDate||''} – ${exp.to||exp.endDate||'Present'}</span>
+          </div>
+          <div class="r-item-sub">${exp.company||''}${exp.location?' · '+exp.location:''}</div>
+          <ul class="r-item-bullets">${(exp.bullets||[]).map(b=>`<li>${b}</li>`).join('')}</ul>`;
+        s.appendChild(item);
+      });
+      root.appendChild(s);
+    }
+
+    // Projects
+    if (projects.length) {
+      projects.sort((a,b)=>(a.order||0)-(b.order||0));
+      const s = sec('Projects');
+      projects.forEach(p => {
+        const link = p.url||p.link||p.github||'';
+        const item = el('div','r-item');
+        item.innerHTML = `
+          <div class="r-item-header">
+            <span class="r-item-title">${p.name||p.title||''}${link?` <a href="${link}" target="_blank" style="font-size:12px;font-weight:400;color:#888;margin-left:6px;text-decoration:none;">↗</a>`:''}</span>
+            <span class="r-item-date">${p.year||''}</span>
+          </div>
+          <div class="r-item-sub">${p.stack||p.tech||p.technologies||''}</div>
+          <ul class="r-item-bullets">${(p.bullets||p.points||p.highlights||[]).map(b=>`<li>${b}</li>`).join('')}</ul>`;
+        s.appendChild(item);
+      });
+      root.appendChild(s);
+    }
+
+    // Skills
+    if (skills.length) {
+      skills.sort((a,b)=>(a.order||0)-(b.order||0));
+      const s = sec('Skills');
+      const grid = el('div','skills-grid');
+      skills.forEach(group => {
+        const items = group.items||group.list||[];
+        const g = el('div');
+        g.innerHTML = `
+          <div class="skill-group-name">${group.category||group.name||''}</div>
+          <div class="skill-tags">${items.map(i=>`<span class="skill-tag">${i}</span>`).join('')}</div>`;
+        grid.appendChild(g);
+      });
+      s.appendChild(grid); root.appendChild(s);
+    }
+
+    // Education
+    if (education.length) {
+      education.sort((a,b)=>(a.order||0)-(b.order||0));
+      const s = sec('Education');
+      education.forEach(edu => {
+        const item = el('div','r-item');
+        item.innerHTML = `
+          <div class="r-item-header">
+            <span class="r-item-title">${edu.degree||''}</span>
+            <span class="r-item-date">${edu.year||''}</span>
+          </div>
+          <div class="r-item-sub">${edu.institution||''}${edu.grade?' · '+edu.grade:''}</div>`;
+        s.appendChild(item);
+      });
+      root.appendChild(s);
+    }
+
+    // Certifications
+    if (certifications.length) {
+      certifications.sort((a,b)=>(a.order||0)-(b.order||0));
+      const s = sec('Certifications');
+      certifications.forEach(cert => {
+        const item = el('div','r-item');
+        item.innerHTML = `
+          <div class="r-item-header">
+            <span class="r-item-title">${cert.name||''}</span>
+            <span class="r-item-date">${cert.year||''}</span>
+          </div>
+          <div class="r-item-sub">${cert.issuer||''}</div>`;
+        s.appendChild(item);
+      });
+      root.appendChild(s);
+    }
+  }
+
+  loadResume();
+</script>
+</body>
+</html>
