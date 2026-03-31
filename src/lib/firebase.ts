@@ -21,7 +21,7 @@ const measurementId = import.meta.env.VITE_MEASUREMENT_ID;
 //   measurementId,
 // };
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAMFc1j5Ewblnw8OGrMb1HJzl9nPEP9YCk",
   authDomain: "portfolio-49755.firebaseapp.com",
   projectId: "portfolio-49755",
