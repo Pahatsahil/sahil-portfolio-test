@@ -1,227 +1,145 @@
-<h1 align="center">Sahil Pahat</h1>
+<line_number> <h1 align="center">Sahil Pahat</h1>
+<line_number>
+<line_number> <p align="center">
+<line_number> React Native Developer • Mobile App Engineer • Cross-Platform Specialist
+<line_number> </p>
+<line_number>
+<line_number> <p align="center">
+<line_number> <a href="https//pahatsahil.github.io/portfolio/">🌐 Live Portfolio</a> •
+<line_number> <a href="https//github.com/Pahatsahil">GitHub</a> •
+<line_number> <a href="https://linkedin.com/in/sahilpahat101019">LinkedIn</a>
 
-<p align="center">
-React Native Developer • Mobile App Engineer • Cross-Platform Specialist
 </p>
 
-<p align="center">
-<a href="https://pahatsahil.github.io/sahil-portfolio-test/">🌐 Live Portfolio</a> •
-<a href="https://github.com/Pahatsahil">GitHub</a> •
-<a href="https://linkedin.com/in/sahilpahat101019">LinkedIn</a>
-</p>
+---
+
+# Modern React Native Portfolio
+
+A high-performance, dynamic **developer portfolio and resume management system** built using **React, TypeScript, Vite, and Firebase**.
+
+This project features a fully integrated **Admin Dashboard** with real-time Firestore synchronization, allowing for instant updates to projects, skills, and resume layouts without touching code.
+
+## 🚀 Key Features
+
+### 💻 Admin Panel (CMS)
+
+- **Authenticated Access:** Secure login via Firebase Authentication.
+- **Real-time Editing:** updates to Firestore broadcast instantly to the frontend.
+- **Image Cloud Storage:** Integrated Firebase Storage for project thumbnails and profile photos.
+- **Detailed Control:** Manage experience bullet points, project visibility, and skill groupings.
+
+### 📄 Pro Resume Engine
+
+- **Theme Switching:** Toggle between `Modern Dark` and `Classic (Deedy-inspired)` themes.
+- **Layout Control:** Switch between 1-column and 2-column (sidebar) layouts dynamically.
+- **PDF Optimized:** Custom CSS print engine ensures a perfect A4 PDF export with no page-break glitches.
+- **Granular Visibility:** Independently hide specific projects or limit experience bullets for the resume view.
+
+### 🎨 Design & Experience
+
+- **Smooth Animations:** Powered by `framer-motion`.
+- **Responsive:** Mobile-first layout optimized for all device sizes.
+- **Rich Tech Stack:** Type-safe architecture using TypeScript and modular CSS.
 
 ---
 
-# React Native Developer Portfolio
+## 🛠 Tech Stack
 
-A modern **developer portfolio website** built using **React, TypeScript, TailwindCSS, and Firebase**.
+### Frontend & UI
 
-This portfolio showcases my **React Native mobile development experience**, projects, and skills.  
-All portfolio content is dynamically loaded from **Firebase Firestore**, allowing updates without redeploying the website.
+- **Framework:** React 18 (Vite)
+- **Styling:** TailwindCSS & Custom Modular CSS
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
 
-The site is optimized for **performance, responsiveness, and GitHub Pages deployment**.
+### Backend & Infrastructure
 
----
-
-# Live Demo
-
-https://pahatsahil.github.io/sahil-portfolio-test/
-
----
-
-# Features
-
-- Modern responsive UI (mobile, tablet, desktop)
-- Dark theme developer portfolio
-- Smooth animations with Framer Motion
-- Firebase Firestore powered CMS
-- Firebase Analytics integration
-- Firebase App Check security
-- EmailJS contact form
-- Dynamic portfolio data (no hardcoded content)
-- GitHub Pages deployment
-- Type-safe React + TypeScript architecture
+- **Database:** Firebase Firestore (NoSQL)
+- **Authentication:** Firebase Auth
+- **File Storage:** Firebase Storage (Images/PDFs)
+- **Deployment:** GitHub Pages + GitHub Actions (CI/CD)
+- **Forms:** EmailJS
 
 ---
 
-# Tech Stack
+## 🏗 Project Architecture
 
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- TailwindCSS
-- Framer Motion
-
-### Backend / Services
-
-- Firebase Firestore
-- Firebase Analytics
-- Firebase App Check
-- EmailJS
-
-### Deployment
-
-- GitHub Pages
-
----
-
-# Portfolio Preview
-
-![Portfolio Screenshot](./screenshots/portfolio.png)
-
----
-
-# Project Architecture
-
+```text
 src
-├ components
-│ ├ Hero
-│ ├ About
-│ ├ SkillsSection
-│ ├ ExperienceSection
-│ ├ ProjectsSection
-│ ├ Contact
-│ └ Footer
-│
-├ hooks
-│ ├ useProfile
-│ ├ useExperience
-│ ├ useProjects
-│ ├ useSkills
-│ ├ useSocial
-│ └ useContact
-│
-├ lib
-│ └ firebase.ts
-│
-└ App.tsx
+├ components      # UI components (Hero, About, Projects, etc.)
+├ pages
+│  ├ Portfolio    # Main Landing Page
+│  ├ Resume       # Dynamic Resume Engine
+│  └ admin        # Authenticated Admin Dashboard
+├ hooks           # Real-time Firestore listeners
+├ lib             # Firebase & Third-party configs
+└ App.tsx         # Layout & Routing logic
+```
 
 ---
 
-# Firestore Data Structure
+## 📦 Getting Started
 
-The portfolio data is stored in **Firebase Firestore**.
-
-Collections:
-
-profile
-experience
-projects
-skills
-social
-contact
-
-Example structure:
-
-profile
-main
-
-experience
-doc1
-doc2
-
-projects
-doc1
-doc2
-
-skills
-doc1
-doc2
-
----
-
-# Getting Started
-
-## Clone the repository
+### 1. Clone & Install
 
 ```bash
-git clone https://github.com/Pahatsahil/sahil-portfolio-test.git
-cd sahil-portfolio-test
-```
-
-## Install dependencies
-
-```
+git clone https://github.com/Pahatsahil/portfolio.git
+cd portfolio
 pnpm install
 ```
 
-## Setup Environment Variables
+### 2. Environment Setup
 
-Create a .env file in the project root.
+Create a `.env` file in the root:
 
+```env
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+VITE_MEASUREMENT_ID=...
+
+VITE_EMAILJS_SERVICE_ID=...
+VITE_EMAILJS_TEMPLATE_ID=...
+VITE_EMAILJS_PUBLIC_KEY=...
 ```
-VITE_EMAILJS_SERVICE_ID=
-VITE_EMAILJS_TEMPLATE_ID=
-VITE_EMAILJS_PUBLIC_KEY=
 
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_MEASUREMENT_ID=
-```
+### 3. Run Locally
 
-## Run Development Server
-
-```
+```bash
 pnpm dev
 ```
 
-The app will start at:
+Open [http://localhost:5173](http://localhost:5173). Access Admin at `/admin`.
 
-```
-http://localhost:5173
-```
+---
 
-## Firebase Setup
+## 🔐 Firestore Security Rules
 
-1. Create a Firebase project
+Since this project uses an Admin Panel with Authenticated writes, update your rules:
 
-2. Enable Firestore Database
-
-3. Create Firestore collections:
-
-```
-profile
-experience
-projects
-skills
-social
-contact
-```
-
-## Firestore Security Rules
-
-For a portfolio site (read-only public data):
-
-```
+```javascript
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
+    // Publicly readable data
     match /{document=**} {
       allow read: if true;
-      allow write: if false;
+      // Only authenticated owner can modify data
+      allow write: if request.auth != null && request.auth.uid == "YOUR_ADMIN_UID";
     }
-
   }
 }
 ```
 
-## Contact
+---
 
-Email:
-sahilpahat12@gmail.com
+## 📬 Contact
 
-LinkedIn:
-https://linkedin.com/in/sahilpahat101019
+- **Email:** [sahilpahat12@gmail.com](mailto:sahilpahat12@gmail.com)
+- **LinkedIn:** [Pahatsahil](https://linkedin.com/in/sahilpahat101019)
+- **GitHub:** [@Pahatsahil](https://github.com/Pahatsahil)
 
-GitHub:
-https://github.com/Pahatsahil
-
-## License
+## 📄 License
 
 MIT License
