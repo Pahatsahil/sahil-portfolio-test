@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -28,16 +29,16 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <motion.a
-          href="/"
-          className="text-2xl font-bold font-['Space_Grotesk']"
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-gradient">SP</span>
-          <span className="text-white ml-1">.dev</span>
-        </motion.a>
+          <Link to="/" className="text-2xl font-bold font-['Space_Grotesk']">
+            <span className="text-gradient">SP</span>
+            <span className="text-white ml-1">.dev</span>
+          </Link>
+        </motion.div>
 
         {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -53,16 +54,19 @@ const Navbar = () => {
               {link.name}
             </motion.a>
           ))}
-          <motion.a
-            href="/resume"
-            className="px-4 py-2 border border-[#61dafb]/40 text-[#61dafb] text-sm font-medium rounded-full hover:bg-[#61dafb]/10 transition-all"
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.35 }}
             whileHover={{ scale: 1.04 }}
           >
-            Resume
-          </motion.a>
+            <Link
+              to="/resume"
+              className="px-4 py-2 border border-[#61dafb]/40 text-[#61dafb] text-sm font-medium rounded-full hover:bg-[#61dafb]/10 transition-all"
+            >
+              Resume
+            </Link>
+          </motion.div>
           <motion.a
             href="#contact"
             className="px-5 py-2.5 bg-gradient-to-r from-[#61dafb] to-[#818cf8] text-[#0f172a] font-semibold rounded-full text-sm hover:shadow-lg hover:shadow-[#61dafb]/25 transition-all"
@@ -103,13 +107,13 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <a
-              href="/resume"
+            <Link
+              to="/resume"
               className="text-[#61dafb] font-medium text-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Resume ↗
-            </a>
+            </Link>
             <a
               href="#contact"
               className="mt-2 px-5 py-3 bg-gradient-to-r from-[#61dafb] to-[#818cf8] text-[#0f172a] font-semibold rounded-full text-center"

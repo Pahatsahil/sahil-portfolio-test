@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../lib/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   LogOut,
   Settings,
@@ -64,12 +64,12 @@ const AdminPanel = () => {
       <aside className="w-64 flex-shrink-0 flex flex-col bg-[#1e293b]/80 border-r border-[#334155]">
         {/* Logo — never scrolls away */}
         <div className="flex-shrink-0 p-6 border-b border-[#334155]">
-          <a href="/" className="toolbar-back">
+          <Link to="/" className="toolbar-back flex items-center gap-2 hover:text-[#61dafb] transition-colors">
             <ArrowLeft size={24} />
             <h1 className="text-xl font-bold font-['Space_Grotesk'] tracking-wide">
               Portfolio <span className="text-[#61dafb]">Admin</span>
             </h1>
-          </a>
+          </Link>
         </div>
 
         {/* Nav — scrolls independently when tabs overflow */}

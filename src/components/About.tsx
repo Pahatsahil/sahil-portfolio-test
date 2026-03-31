@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { User, Download } from "lucide-react";
 import FadeIn from "./animations/FadeIn";
+import { Link } from "react-router-dom";
 import type { Profile } from "../hooks/usePortfolioData";
 
 interface AboutProps {
@@ -102,15 +103,18 @@ const About = ({ profile }: AboutProps) => {
                 </ul>
               </div>
 
-              <motion.a
-                href={"/resume"}
-                className="inline-flex items-center gap-2 px-6 py-3 border border-[#334155] text-white font-semibold rounded-full hover:border-[#61dafb] hover:bg-[#1e293b] transition-all"
+              <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Download size={18} />
-                View Full Resume
-              </motion.a>
+                <Link
+                  to="/resume"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-[#334155] text-white font-semibold rounded-full hover:border-[#61dafb] hover:bg-[#1e293b] transition-all"
+                >
+                  <Download size={18} />
+                  View Full Resume
+                </Link>
+              </motion.div>
             </div>
           </FadeIn>
         </div>

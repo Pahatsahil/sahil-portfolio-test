@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import FadeIn from "./animations/FadeIn";
 import TypingEffect from "./animations/TypingEffect";
+import { Link } from "react-router-dom";
 import type { Profile } from "../hooks/usePortfolioData";
 
 interface HeroProps {
@@ -90,14 +91,17 @@ const Hero = ({ profile }: HeroProps) => {
                   className="group-hover:translate-x-1 transition-transform"
                 />
               </motion.button>
-              <motion.a
-                href="/resume"
-                className="px-8 py-4 border border-[#334155] text-white font-semibold rounded-full hover:bg-[#1e293b] transition-all"
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                View Resume
-              </motion.a>
+                <Link
+                  to="/resume"
+                  className="px-8 py-4 border border-[#334155] text-white font-semibold rounded-full hover:bg-[#1e293b] transition-all"
+                >
+                  View Resume
+                </Link>
+              </motion.div>
             </div>
           </FadeIn>
         </div>
