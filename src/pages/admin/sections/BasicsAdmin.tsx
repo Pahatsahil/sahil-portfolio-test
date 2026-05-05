@@ -84,24 +84,33 @@ const BasicsAdmin = () => {
     fetchBasics();
   }, []);
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !storage) return;
-    setUploadingPhoto(true);
-    const storageRef = ref(storage, `profile/${Date.now()}_${file.name}`);
-    const task = uploadBytesResumable(storageRef, file);
-    task.on(
-      "state_changed",
-      null,
-      (err) => { toast.error("Photo upload failed"); setUploadingPhoto(false); console.error(err); },
-      async () => {
-        const url = await getDownloadURL(task.snapshot.ref);
-        setData((d) => ({ ...d, photoUrl: url }));
-        toast.success("Photo uploaded!");
-        setUploadingPhoto(false);
-      }
+ const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  setUploadingPhoto(true);
+
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: "POST", body: formData }
     );
-  };
+
+    if (!res.ok) throw new Error("Upload failed");
+
+    const data = await res.json();
+    setData((d) => ({ ...d, photoUrl: data.secure_url }));
+    toast.success("Photo uploaded!");
+  } catch (err) {
+    toast.error("Photo upload failed");
+    console.error(err);
+  } finally {
+    setUploadingPhoto(false);
+  }
+};
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
